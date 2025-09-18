@@ -63,13 +63,15 @@ def plot_mean(chl_list, month):
     plt.close()
 
 #複数月をまとめてプロット
-def plot_mean_same(chl_list1, chl_list2, month):
+def plot_mean_same(chl_list, month_list):
     
     years = [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
     
     plt.figure(figsize=(9, 4), dpi=300)
-    plt.plot(years, chl_list1, marker='o', color='blue', linewidth=2, label=month[0])
-    plt.plot(years, chl_list2, marker='o', color='green', linewidth=2, label=month[1])
+    
+    color_list = ["blue", "green", "lightgreen"]
+    for chl, color, month in zip(chl_list, color_list, month_list):
+        plt.plot(years, chl, marker='o', color=color, linewidth=2, label=month)
 
     plt.ylim([0,5])
     plt.xlabel('Year')
@@ -83,7 +85,7 @@ def plot_mean_same(chl_list1, chl_list2, month):
                         top=0.95,     # 上側の余白)  # サブプロット間の間隔を調整
     )
 
-    savepath = f"C:\\Users\\sakum\\Desktop\\abe_paper\\chlorophyll_mean_{month[0]}_{month[1]}.png"
+    savepath = f"C:\\Users\\sakum\\Desktop\\abe_paper\\chlorophyll_mean_{month_list[0]}_{month_list[-1]}.png"
     plt.savefig(savepath)
     plt.close()
     
@@ -99,10 +101,12 @@ def main():
     #2月と3月に絞り込み
     feb_files = [path for path in matching_files if ("0201_" in path)]
     mar_files = [path for path in matching_files if ("0301_" in path)]
+    apr_files = [path for path in matching_files if ("0401_" in path)]
 
     #平均値の格納用
     feb_chl_means = []
     mar_chl_means = []
+    apr_chl_means = []
     
     #2月の平均値算出
     for path in feb_files:
@@ -120,19 +124,31 @@ def main():
         mar_chl_means.append(chl_mean)
         print(f"3月平均値: {chl_mean:.2f} - {path}")
     
+    #4月の平均値算出
+    for path in apr_files:
+        
+        df = extract_data(path)
+        chl_mean = df['chlorophyll'].mean()
+        apr_chl_means.append(chl_mean)
+        print(f"4月平均値: {chl_mean:.2f} - {path}")
+        
     #月別で時系列プロット
     plot_mean(feb_chl_means, "Feb")
     plot_mean(mar_chl_means, "Mar")
+    plot_mean(apr_chl_means, "Apr")
     
     #2, 3月まとめてプロット
-    month_list = ["Feb", "Mar"]
-    plot_mean_same(feb_chl_means, mar_chl_means, month_list)
+    month_list = ["Feb", "Mar", "Apr"]
+    chl_lists =[feb_chl_means, mar_chl_means, apr_chl_means]
+    plot_mean_same(chl_lists, month_list)
 
     #平均値のテキスト保存
     result = pd.DataFrame({
         "year": [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
         "feb":feb_chl_means,
-        "mar":mar_chl_means
+        "mar":mar_chl_means, 
+        "apr":apr_chl_means, 
+        
     })
     
     result.to_csv("C:\\Users\\sakum\\Desktop\\abe_paper\\chl_mean_result.txt", sep='\t', index=False)

@@ -23,6 +23,7 @@ def mapping(path):
     print(df)
     
     save_dir = f"C:\\Users\\sakum\\Desktop\\abe_paper\\map_zoom\\"
+    save_dir = f"C:\\Users\\sakum\\Desktop\\abe_paper\\map_zoom\\Apr"   #追加4月
     savepath = f"{save_dir}\\{path.split("\\")[-1].replace(".txt",".tif")}"
     #savepath = "C:\\Users\\sakum\\Desktop\\abe_paper\\test.png" ##test用
     
@@ -68,7 +69,11 @@ def main():
     matching_files = glob.glob(pattern, recursive=True)
     
     #2月と3月に絞り込み
-    matching_files = [path for path in matching_files if ("0201_" in path) or ("0301_" in path)]
+    #matching_files = [path for path in matching_files if ("0201_" in path) or ("0301_" in path)]
+    
+    #追加：4月
+    matching_files = [path for path in matching_files if ("0401_" in path)]
+    
 
     for path in matching_files:
 
