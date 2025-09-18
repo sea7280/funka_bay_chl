@@ -100,34 +100,37 @@ def main():
     feb_files = [path for path in matching_files if ("0201_" in path)]
     mar_files = [path for path in matching_files if ("0301_" in path)]
 
+    #平均値の格納用
     feb_chl_means = []
     mar_chl_means = []
     
+    #2月の平均値算出
     for path in feb_files:
         
         df = extract_data(path)
         chl_mean = df['chlorophyll'].mean()
         feb_chl_means.append(chl_mean)
         print(f"2月平均値: {chl_mean:.2f} - {path}")
-        
+    
+    #3月の平均値算出
     for path in mar_files:
         
         df = extract_data(path)
         chl_mean = df['chlorophyll'].mean()
         mar_chl_means.append(chl_mean)
         print(f"3月平均値: {chl_mean:.2f} - {path}")
-        
+    
+    #月別で時系列プロット
     plot_mean(feb_chl_means, "Feb")
     plot_mean(mar_chl_means, "Mar")
     
+    #2, 3月まとめてプロット
     month_list = ["Feb", "Mar"]
     plot_mean_same(feb_chl_means, mar_chl_means, month_list)
-    
-    years = [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]
-    
+
     #平均値のテキスト保存
     result = pd.DataFrame({
-        "year": years,
+        "year": [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
         "feb":feb_chl_means,
         "mar":mar_chl_means
     })
@@ -138,7 +141,7 @@ def main():
 if __name__ == "__main__":
     
     main()
-    path = "C:\\Users\\sakum\\Desktop\\abe_paper\\txt\\2023\\AQUA_MODIS.20230301_20230331.L4b.MO.GSM.x.txt"
+    #path = "C:\\Users\\sakum\\Desktop\\abe_paper\\txt\\2023\\AQUA_MODIS.20230301_20230331.L4b.MO.GSM.x.txt"
     
     #extract_data(path)
     

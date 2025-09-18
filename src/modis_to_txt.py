@@ -13,12 +13,6 @@ def to_txt(path):
         print(nc)
         
         l3_group = nc.groups['level-3_binned_data']
-        # 地理的範囲を取得
-        lat_min = nc.getncattr('southernmost_latitude')
-        lat_max = nc.getncattr('northernmost_latitude')
-        lon_min = nc.getncattr('westernmost_longitude')
-        lon_max = nc.getncattr('easternmost_longitude')
-        resolution = nc.getncattr('spatialResolution')
 
         # データ読み込み
         bin_list = l3_group['BinList'][:]
@@ -116,8 +110,12 @@ def bin_to_coords(bin_nums):
     return lats, lons
 
 def main():
-        
+    #######################################################################
+    
+    #プロダクトデータディレクトリ
     data_dir = "C:\\Users\\sakum\\Desktop\\abe_paper\\data"
+
+    #######################################################################
 
     # *test.txtパターンに一致するファイルパスを再帰的に検索
     pattern = os.path.join(data_dir, "**", "*.nc")
@@ -137,10 +135,12 @@ def main():
         txt_df.to_csv(savepath, sep='\t', index=False)
         print(f"end: {path}")
 
+#実行
 if __name__ == "__main__":
     
     main()
-    test = "C:\\Users\\sakum\\Desktop\\abe_paper\\data\\AQUA_MODIS.20110501_20110531.L4b.MO.GSM.x.nc"
+    
+    #test = "C:\\Users\\sakum\\Desktop\\abe_paper\\data\\AQUA_MODIS.20110501_20110531.L4b.MO.GSM.x.nc"
     
     #df = to_txt(test)
     #df.to_csv("C:\\Users\\sakum\\Desktop\\abe_paper\\test.txt", sep='\t', index=False)

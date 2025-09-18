@@ -26,6 +26,7 @@ def mapping(path):
     savepath = f"{save_dir}\\{path.split("\\")[-1].replace(".txt",".tif")}"
     #savepath = "C:\\Users\\sakum\\Desktop\\abe_paper\\test.png" ##test用
     
+    #噴火湾の範囲に絞り込み
     min_lat = 42
     max_lat = 42.7
     min_lon = 140.2
@@ -36,15 +37,7 @@ def mapping(path):
     fig.basemap(region=area, projection="M10c", frame=["xa0.2f0.1", "ya0.2f0.1"])    
     
     pygmt.makecpt(series=[0, 5, 0.01], cmap="jet", background="a",continuous=True)
-    
-    #data_array = pygmt.xyz2grd(
-    #    x=df['longitude'], 
-    #    y=df['latitude'], 
-    #    z=df["chlorophyll"], 
-    #    spacing= "0.05/0.05",
-    #    region=[min_lon-0.25, max_lon+0.25, min_lat-0.25, max_lat+0.25]
-    #)
-    #fig.grdimage(grid=data_array, region=area)
+
     fig.plot(
         x=df['longitude'].values,
         y=df['latitude'].values, 
